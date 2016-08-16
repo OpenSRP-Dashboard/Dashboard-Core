@@ -1,0 +1,47 @@
+<data-ng-include src="'views/partials/header.html'"></data-ng-include>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <data-ng-include src="'views/partials/left-sidebar.html'"></data-ng-include>
+            <div class="row"> <!-- main col left --> 
+              <div class="col-sm-2 col-md-2"></div>
+              <div class="col-sm-9 col-md-9">
+                <div id="top" class="login-container">
+                  <h2 class="form-signin-heading">Edit Role</h2>
+                  <p class="lead"></p>
+                  
+                  <form  class="form-search-patient " ng-submit="edit()">
+                  <span id="validmessagename" style="color:#000000;display:none">You have typed invalid character. </span>                    
+                  <input type="text" class="form-control" ng-readonly="true" id="name" name="roleName" ng-model="formData.name" placeholder="Role Name">
+                  <input type="hidden" class="form-control" id="roleId" name="roleId" ng-model="formData.id" placeholder="Role Name">
+                  <br />
+                  <label> Privileges: </label>
+                  <br/>
+                  <span ng-repeat="access in accessList" style="float:left; width:300px; display:inline-block;">
+                  <!-- <input ng-checked="checked(access)" type="checkbox"  class="role_method" ng-model="formData.accessTokens[$index]" ng-true-value="'{{access}}'">{{access}} -->
+
+                  <input type="checkbox" ng-checked="formData.privilegesOfCurrentRole[access.name]" ng-click="formData.privilegesOfCurrentRole[access.name] = !formData.privilegesOfCurrentRole[access.name]">   <span > {{access.name}}</span>  <!--  {{$even}} <span ng-if="$even">wow</span>             -->
+                  <br ng-if="!$even">
+                  </span>
+                  
+                  <br />
+                  <br/>
+                  <br/>
+                  <div style="float:left; width:300px; display:inline-block;">
+                  <label> Status : </label>
+                  <input type="checkbox"  class="role_method" ng-model="formData.status" >
+                  </div>
+                  <br />
+                  <div id="message"></div>
+                  <button id="submit" class="btn btn-lg btn-primary btn-block"  type="submit"> Submit</button>
+                  </form>
+                  <!-- {{formData.privilegesOfCurrentRole}} -->
+                  <div class="spinner" ng-show="loading"> <center><img src="images/spinner.gif"  alt="Opensrp"/></center></div>
+                </div>
+              </div>
+            </div>
+            
+        </div>
+    </div>    
+</section>
