@@ -24,7 +24,7 @@ angular.module('opensrpSiteApp')
                         $scope.$apply();
                     }
                 } else {
-                    Authentication.asuthenticate("sohel", "Sohel@123");
+                    Authentication.authenticate("sohel", "Sohel@123");
                     {
                         //
                     }

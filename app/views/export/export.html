@@ -1,0 +1,33 @@
+<data-ng-include src="'views/partials/header.html'"></data-ng-include>
+
+<!-- box -->
+ <header>
+        <div class="container">
+            
+        </div>
+</header>
+ 
+<div show-during-resolve class="loader">   
+  <center><img src="images/spinner.gif"  alt="Opensrp"/></center>
+</div>
+ <div class="row" style="min-height:450px">
+ <center><h1>Welcome to Dahboard Core - Export</h1></center>
+
+ <form  name="exportData" ng-submit="export()">                    
+ <div class="row">
+<div class="col-md-7">
+	Form Name
+    <select id="dropdownMenu1" name="fromDropDown" ng-model="dropdown">
+      <option ng-repeat="form in forms" value="{{form}}">{{form}}</option>
+    </select>
+    <input class="form-control" type="daterange" ng-model="dateRange" min-date="2014-02-23">
+    <button type="submit" id="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
+</div>
+</div>
+ </form>
+
+
+ <center><div>{{data | json}}</div></center>
+ </div>
+
+ 

@@ -208,6 +208,14 @@ angular
           }]
         }
       })
+      .when('/sampleRegister', {
+        templateUrl: 'views/register/register.html',
+        controller: 'RegisterCtrl'    
+      })
+      .when('/sampleExport', {
+        templateUrl: 'views/export/export.html',
+        controller: 'ExportCtrl'
+      })
       .when('/login', {
         templateUrl: 'views/acl/login.html',
         controller: 'LoginCtrl',
