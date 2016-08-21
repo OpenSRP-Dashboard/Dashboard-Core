@@ -24,7 +24,7 @@
                     <tr ng-repeat="user in Users">
                       <td style="width: 10%"><a href="/#/user/{{user.value.user_name}}" >{{user.value.user_name}}</a> </td>
                       <td style="width: 10%"><span ng-repeat="role in user.value.roles"><a href="/#/role/{{role.id}}" >{{role.name}}</a><br/></span></td>
-                      <td style="width: 10%">{{user.value.status}}</td>
+                      <td style="width: 10%">{{user.value.status}}  &nbsp;&nbsp;&nbsp;&nbsp; </td>                      
                     </tr>
                     </table>
                     <div class="spinner" ng-show="loading"> <center><img src="images/spinner.gif"  alt="Opensrp"/></center></div>

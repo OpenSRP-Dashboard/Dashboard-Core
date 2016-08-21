@@ -18,33 +18,7 @@ angular.module('opensrpSiteApp')
       $rootScope.loading = true;      
       $scope.formData = {};
       //console.log($scope.formData.password + " -ho");
-      User.fetchRoles($scope, $rootScope, $timeout);
-      User.fetchUsers($scope, $rootScope, $timeout);
-      //console.log($scope.formData.password + " -ho");
-
-      $scope.ifOneElementOfBooleanArrayIsTrue = function (object) {
-        return Object.keys(object).some(function (key) {
-          //console.log("called for key -" + key);
-          return object[key];
-        });
-      }
-      
-      $scope.roleCheckboxClicked = function (toggleThis) {
-        $scope.formData.selectedRoles[toggleThis] = ! $scope.formData.selectedRoles[toggleThis]
-        console.log($scope.formData.selectedRoles);
-        if($scope.ifOneElementOfBooleanArrayIsTrue($scope.formData.selectedRoles)){
-          console.log("at least one role is selected");
-          if(!$("#decoyCheckbox").is(':checked')){
-            $("#decoyCheckbox").click();
-          }
-        }
-        else{
-          console.log("no role is selected");
-          if($("#decoyCheckbox").is(':checked')){
-            $("#decoyCheckbox").click();
-          }
-        }
-      }
+      User.getRolesAndUsers($scope, $rootScope, $timeout);     
 
       $scope.save = function(){
         console.log("form submitted");
@@ -68,33 +42,7 @@ angular.module('opensrpSiteApp')
         User.createUser($scope.formData,$window,Flash);
       }     
     }else if(userName){
-      $rootScope.loading = true;
-      /*$scope.save = function(){
-       User.editRole($scope.roleName,$scope.userName,roleId,$scope.statusModel,$window,Flash);
-      }*/
-      $scope.ifOneElementOfBooleanArrayIsTrue = function (object) {
-        return Object.keys(object).some(function (key) {
-          //console.log("called for key -" + key);
-          return object[key];
-        });
-      }
-      
-      $scope.roleCheckboxClicked = function (toggleThis) {
-        $scope.formData.selectedRoles[toggleThis] = ! $scope.formData.selectedRoles[toggleThis]
-        console.log($scope.formData.selectedRoles);
-        if($scope.ifOneElementOfBooleanArrayIsTrue($scope.formData.selectedRoles)){
-          console.log("at least one role is selected");
-          if(!$("#decoyCheckbox").is(':checked')){
-            $("#decoyCheckbox").click();
-          }
-        }
-        else{
-          console.log("no role is selected");
-          if($("#decoyCheckbox").is(':checked')){
-            $("#decoyCheckbox").click();
-          }
-        }
-      }
+      $rootScope.loading = true;      
 
       $scope.save = function(){
         console.log("form submitted");
@@ -119,7 +67,7 @@ angular.module('opensrpSiteApp')
       }
 
       $scope.formData = {};
-      User.userByName($scope,$rootScope,$timeout,userName,$q);
+      User.getUserByName($scope,$rootScope,$timeout,userName,$q);
     }else{
       $rootScope.loading = true;
       $scope.userAssign =
@@ -127,8 +75,32 @@ angular.module('opensrpSiteApp')
       '<i class="glyphicon glyphicon-list-alt"></i>'+
       ' <span>Add User</span>'+
       '</a>';
-      User.allUsers($scope,$rootScope);
+      User.getAllUsers($scope,$rootScope);
     }
+
+    $scope.ifOneElementOfBooleanArrayIsTrue = function (object) {
+      return Object.keys(object).some(function (key) {
+        //console.log("called for key -" + key);
+        return object[key];
+      });
+    };
+    
+    $scope.roleCheckboxClicked = function (toggleThis) {
+      $scope.formData.selectedRoles[toggleThis] = ! $scope.formData.selectedRoles[toggleThis];
+      console.log($scope.formData.selectedRoles);
+      if($scope.ifOneElementOfBooleanArrayIsTrue($scope.formData.selectedRoles)){
+        console.log("at least one role is selected");
+        if(!$("#decoyCheckbox").is(':checked')){
+          $("#decoyCheckbox").click();
+        }
+      }
+      else{
+        console.log("no role is selected");
+        if($("#decoyCheckbox").is(':checked')){
+          $("#decoyCheckbox").click();
+        }
+      }
+    };
      
   });
 
