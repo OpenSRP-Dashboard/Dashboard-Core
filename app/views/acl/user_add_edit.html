@@ -6,7 +6,7 @@
             <div class="row"> <!-- main col left -->
               <div class="col-sm-9 col-md-9">
                 <div id="top" class="login-container">
-                    <h2 class="form-signin-heading">Add User</h2>
+                    <h2 class="form-signin-heading"><span ng-show="ifEdit">Edit</span> <span ng-show="!ifEdit">Add</span> User</h2>
                     <p class="lead form-signin-heading"></p>
                     <form  name="addUser" ng-submit="save()">
 					<div class="row">
@@ -77,7 +77,7 @@
                    <div class="row">
                     <div class="col-sm-4 col-md-4">
                     <label>Password</label>  
-                    <input type="password" class="form-control" ng-required="true" id="password" name="password" ng-model="formData.password" placeholder="Password" ng-minLength="6" ng-pattern="/^[a-zA-Z0-9]*$/">
+                    <input type="password" class="form-control" ng-required="!ifEdit" id="password" name="password" ng-model="formData.password" placeholder="Password" ng-minLength="6" ng-pattern="/^[a-zA-Z0-9]*$/" >
                     <div ng-messages="addUser.password.$error" >
                     <div ng-message="required" class="maspro">
                         Enter a password
