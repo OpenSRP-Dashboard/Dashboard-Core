@@ -162,6 +162,82 @@ angular.module('opensrpSiteApp')
         });
       };
 
+      this.initiateLocationEditNew = function($scope, $rootScope, $q){
+        var locationInfoUrl = OPENSRP_WEB_BASE_URL + '/get-location-info-new?locationId=' + $scope.locationId;
+        var locationTagUrl = OPENSRP_WEB_BASE_URL+"/get-all-location-tags";  
+        var callForLocationTags = $http.get(locationTagUrl, { cache: false});
+        var callForLocationInfo = $http.get(locationInfoUrl, { cache: false});
+        /*$http.get(locationInfoUrl, { cache: false}).success(function (data) {
+          console.log(data);
+          $
+        });*/
+        $q.all([callForLocationTags, callForLocationInfo]).then(function(results){
+          console.log(results[0].data);
+          console.log(results[1].data);
+
+          $scope.locationTags = [];
+          $scope.allLocationTags = results[0].data;        
+          
+          $scope.rootTag = {};
+          for(var i = 0; i < results[0].data.length; i++){
+            if(results[0].data[i].parentTagId === ""){
+              $scope.rootTag = results[0].data[i];
+              break;
+            }
+          }   
+
+          $scope.sortedTags = [];
+          //$scope.sortedTags.push(rootTag);
+          var currentTag = $scope.rootTag;
+          for(var i = 0; i < results[0].data.length - 1; i++){
+            for(var j= 0; j< results[0].data.length; j++){
+              if(results[0].data[j].parentTagId === currentTag.id){
+                console.log("returning " + results[0].data[j].name);
+                currentTag = results[0].data[j];
+                break;
+                //return tags[i];
+              }
+            }
+            $scope.sortedTags.push(currentTag);            
+          }
+
+          console.log($scope.sortedTags);
+          
+          var found = 0;
+          for(var i = 0; i < $scope.sortedTags.length; i++){
+            if(results[1].data.tagName === $scope.sortedTags[i].name){
+              found = 1;
+              $scope.selectedTagIndex = i;
+              $scope.currentTagId = $scope.sortedTags[i].id;
+              $scope.selectedTag = $scope.sortedTags[i].id;
+              $scope.selectedTagName = results[1].data.tagName;
+              $scope.textboxReached = true;                                          
+            }
+            if(found == 0){
+              $scope.show[$scope.sortedTags[i].name] = true;              
+            }
+            else{
+             $scope.show[$scope.sortedTags[i].name] = false; 
+            }
+          }
+
+          for(var i = 0; i < results[1].data.locations.length; i++){
+            $scope.selectOptions[results[1].data.locations[i].tagName] = results[1].data.locations[i].ownSiblings;
+            $scope.selections[results[1].data.locations[i].tagName] = results[1].data.locations[i].currentSelection.id;
+            if(results[1].data.locations[i].tagName === results[1].data.tagName){
+              $scope.currentParentId =  results[1].data.locations[i].parentSelection.id;
+              $scope.currentParentName = results[1].data.locations[i].parentSelection.name;      
+              $scope.locationName = results[1].data.locations[i].currentSelection.name;
+            }
+          }    
+
+          $scope.selectedTagName = results[1].data.tagName;
+
+          $rootScope.loading = false;
+        })
+        
+      }
+
       this.initiateLocationEdit = function($scope, $rootScope, $q){
         var locationInfoUrl = OPENSRP_WEB_BASE_URL + '/get-location-info?locationId=' + $scope.locationId;
         var locationTagUrl = OPENSRP_WEB_BASE_URL+"/get-all-location-tags";  
@@ -208,7 +284,7 @@ angular.module('opensrpSiteApp')
             if(results[1].data.tagName === $scope.sortedTags[i].name){
               found = 1;
               $scope.selectedTagIndex = i;
-              $scope.selectedTagName = $scope.sortedTags[i].name;
+              $scope.selectedTag = $scope.sortedTags[i].id;
               $scope.currentTagId = $scope.sortedTags[i].id;
               $scope.selectedTagName = results[1].data.tagName;
               $scope.textboxReached = true;

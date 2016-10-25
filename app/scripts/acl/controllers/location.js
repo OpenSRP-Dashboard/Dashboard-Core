@@ -156,6 +156,7 @@ angular.module('opensrpSiteApp')
       $scope.currentTagId = '';
 
       $rootScope.loading = true;
+      //Location.initiateLocationEditNew($scope, $rootScope, $q);
       Location.initiateLocationEdit($scope, $rootScope, $q);
       //Location.getAllLocationTags($scope, $rootScope);
 
@@ -168,6 +169,46 @@ angular.module('opensrpSiteApp')
         //console.log($scope.locationName);
         console.log(finalLocationData);
         Location.editLocation(finalLocationData, $window,Flash);
+      }
+
+      $scope.loadChildSelect = function(nameOfSelectedTag){
+        /*var currentValue = "value_" + $scope.sortedTags[$scope.reachedTagIndex].name;
+        console.log(currentValue);*/
+        //$scope.reachedTagIndex = 
+        console.log(nameOfSelectedTag + " --value of something"); 
+        console.log($scope.selections[nameOfSelectedTag]);     
+        $scope.currentParentId = $scope.selections[nameOfSelectedTag];
+        for(var i =0; i< $scope.selectOptions[nameOfSelectedTag].length; i++){
+          if($scope.currentParentId == $scope.selectOptions[nameOfSelectedTag][i].id){
+            $scope.currentParentName = $scope.selectOptions[nameOfSelectedTag][i].name;
+          }
+        }
+        
+        var childTagName;
+        for(var i =0; i<$scope.sortedTags.length; i++){
+          if($scope.sortedTags[i].name === nameOfSelectedTag){
+            childTagName = $scope.sortedTags[i+1].name;
+            $scope.reachedTagIndex = i;
+          }
+        }
+        if(childTagName === $scope.selectedTagName){
+          console.log("detected");
+          $scope.textboxReached = true;          
+        }
+        else{
+          $scope.textboxReached = false; 
+        }
+
+        //console.log('reached index- ' + $scope.reachedTagIndex);
+
+        for(var i = $scope.reachedTagIndex + 1; i<$scope.sortedTags.length; i++){
+          $scope.selections[$scope.sortedTags[i].name] = '';
+          $scope.selectOptions[$scope.sortedTags[i].name] = '';  
+        }
+
+        Location.getChildrenLocationsAndAppend($scope, $rootScope, $scope.selections[nameOfSelectedTag], childTagName); 
+        console.log($scope.selections);         
+        console.log($scope.selectOptions);
       }
 
     }
