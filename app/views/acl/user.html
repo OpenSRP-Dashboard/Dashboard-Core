@@ -20,9 +20,10 @@
                     <table>
                       <tr><td>User Name</td><td>Role Name</td><td>Status</td></tr>
                     <!-- <tr ng-repeat="role in roleAndUser track by $index"> -->      
-                    <!-- <a href="/#/user/{{role.roleId}}/{{role.roleName}}/{{role.userName}}/{{role.status}}" > -->                
+                    <!-- <a href="/#/user/{{role.roleId}}/{{role.roleName}}/{{role.userName}}/{{role.status}}" > -->
                     <tr ng-repeat="user in Users">
-                      <td style="width: 10%"><a href="/#/user/{{user.value.user_name}}" >{{user.value.user_name}}</a> </td>
+                      <td style="width: 10%"><a href="/#/user/{{user.value.user_name}}" >{{user.value.user_name}}</a>
+                      <a href="/#/user/{{user.value.user_name}}/location" >assign location</a> </td>
                       <td style="width: 10%"><span ng-repeat="role in user.value.roles"><a href="/#/role/{{role.id}}" >{{role.name}}</a><br/></span></td>
                       <td style="width: 10%">{{user.value.status}}  &nbsp;&nbsp;&nbsp;&nbsp; </td>                      
                     </tr>

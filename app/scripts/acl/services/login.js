@@ -16,12 +16,25 @@ angular.module('opensrpSiteApp')
             var authorizationHeader = 'Basic ' + Base64.encode(username + ':' + password);
             
             Authentication.clearCredentials();
-            return  $http({method: 'GET', url: authenticationURL,cache:true, headers: {'Authorization': authorizationHeader}})
-                .then(function () {                    
+
+            return $http.get(authenticationURL, { 
+              cache: false,
+              withCredentials: false,
+              headers: {
+                'Authorization' : authorizationHeader
+              }
+            }).then(function () {                    
                     return true;
                 }, function () {
                     delete  $http.defaults.headers.common.Authorization;
                     return false;
                 });
+            //return  $http({method: 'GET', url: authenticationURL,cache:false, headers: {'Authorization': authorizationHeader}});
+                /*.then(function () {                    
+                    return true;
+                }, function () {
+                    delete  $http.defaults.headers.common.Authorization;
+                    return false;
+                });*/
         };
     });

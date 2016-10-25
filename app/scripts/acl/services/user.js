@@ -8,7 +8,7 @@
  * Service in the opensrpSiteApp.
  */
 angular.module('opensrpSiteApp')
-  .service('User', function ($http,$rootScope,Base64,OPENSRP_WEB_BASE_URL, COUCHURL, $q) {
+  .service('User', function ($http,$rootScope,Base64,OPENSRP_WEB_BASE_URL, COUCHURL, $q, Location) {
     // AngularJS will instantiate a singleton by calling "new" on this function    
           
       this.getAllUsers = function ($scope,$rootScope){
@@ -110,7 +110,7 @@ angular.module('opensrpSiteApp')
         delete data.selectedRoles;
         delete data.decoyCheckbox;
         console.log(data);    
-        /*$http.post(apiURLs, data).success(function (data) {
+        $http.post(apiURLs, data).success(function (data) {
           $("#submit").html("Submit");
            $('#submit').prop('disabled', false);
           if (data == 1) {            
@@ -122,25 +122,101 @@ angular.module('opensrpSiteApp')
             $( "#message" ).delay(3000).fadeOut( "slow" );
           }
           
-        });*/   
+        });
       };
+
+      this.initiateLocationAssignment = function($scope,$rootScope,$timeout,id,$q){
+        console.log("User.initiateLocationAssignment called.");    
+        $rootScope.loading = true;
+        var Userurl = COUCHURL+'/opensrp/_design/User/_view/by_user_name?key="' + id + '"';   
+        var locationInfoUrl = OPENSRP_WEB_BASE_URL + '/get-location-info?locationId=' ;
+        
+        //this.getUserByName($scope,$rootScope,$timeout,id,$q);
+
+        $http.get(Userurl, { 
+          cache: false,
+          withCredentials: false,
+          headers: {
+            'Authorization' : ''
+          }
+        })
+        .success(function (data) {
+          Location.getAllLocationTags($scope,$rootScope);
+          
+          $scope.currentUser = data.rows[0].value;
+          if($scope.currentUser.location && $scope.currentUser.location.length > 0){
+
+            $http.get(locationInfoUrl+ $scope.currentUser.location[0].id, { cache: false})
+              .success(function(data){
+                console.log(data);
+                $scope.selections['Ward'] = data.parentWard.id;
+                $scope.selectOptions['Ward'] = data.parentWardSiblings;  
+
+                $scope.selections['Union'] = data.parentUnion.id;
+                $scope.selectOptions['Union'] = data.parentUnionSiblings;  
+
+                $scope.selections['Upazilla'] = data.parentUpazilla.id;
+                $scope.selectOptions['Upazilla'] = data.parentUpazillaSiblings;  
+
+                $scope.selections['District'] = data.parentDistrict.id;
+                $scope.selectOptions['District'] = data.parentDistrictSiblings;  
+
+                $scope.selections['Division'] = data.parentDivision.id;
+                $scope.selectOptions['Division'] = data.parentDivisionSiblings; 
+
+                $scope.selections['Division'] = data.parentDivision.id;
+                $scope.selectOptions['Division'] = data.parentDivisionSiblings; 
+
+                $scope.selectOptions['Unit'] = data.ownSiblings;
+
+                if(data.ownSiblings && data.ownSiblings.length>0) {
+                  for(var i = 0 ; i < $scope.currentUser.location.length; i++){
+                    $scope.unitSelections[$scope.currentUser.location[i].name] = true;  
+                  }
+                }
+              });
+          }else{
+            Location.getChildrenLocationsAndAppend($scope, $rootScope, "", "Division");
+          }
+        });
+      }; 
+
+      this.assignLocationToUser = function(data, $window){
+        $("#submit").attr('disabled','disabled');
+        $("#submit").html("Please Wait");
+        
+        var apiURLs = OPENSRP_WEB_BASE_URL+"/assign-location-to-user"; 
+
+        $http.post(apiURLs, data).success(function (data) {
+          $("#submit").html("Submit");
+           $('#submit').prop('disabled', false);
+          if (data == 1) {            
+            console.log("Location assignment to user done.");
+            $window.location = '/#/users';
+          }else{
+            console.log("Location assignment to user failed");
+          }
+          
+        });
+        
+      }; 
 
       this.getUserByName =  function($scope,$rootScope,$timeout,id,$q){
         console.log("User.userByName called.");
         //http://localhost:5984/opensrp/_design/Privilege/_view/privilege_by_id?key=%225da9913d2e051554a772deae8b02aa0b%22
         var url = COUCHURL+'/opensrp/_design/User/_view/by_user_name?key="' + id + '"';  
         var roleUrl = COUCHURL + "/opensrp/_design/Role/_view/role_by_name";
-        var userUrl = COUCHURL + "/opensrp/_design/User/_view/by_user_name";
+        var userUrl =  COUCHURL + "/opensrp/_design/User/_view/by_user_name"; // "/all-user-name";
         $rootScope.loading = true;
         var fetchedRoles = $http.get(roleUrl,{ 
-          cache: true,
+          cache: false,
           withCredentials: false,
           headers: {
             'Authorization' : ''
           }
         }); 
         var fetchedUsers = $http.get(userUrl,{ 
-          cache: true,
+          cache: false,
           withCredentials: false,
           headers: {
             'Authorization' : ''
@@ -197,10 +273,13 @@ angular.module('opensrpSiteApp')
           }
           $("#decoyCheckbox").click();          
           console.log($scope.formData.selectedRoles);
-          for(var i = 0 ; i < results[2].data.rows[0].value.children.length; i++){
-            console.log("found children- " + results[2].data.rows[0].value.children[i].user_name);
-            $scope.formData.selectedChildren[results[2].data.rows[0].value.children[i].user_name] = true;
+          if(results[2].data.rows[0].value.children){
+            for(var i = 0 ; i < results[2].data.rows[0].value.children.length; i++){
+              console.log("found children- " + results[2].data.rows[0].value.children[i].user_name);
+              $scope.formData.selectedChildren[results[2].data.rows[0].value.children[i].user_name] = true;
+            } 
           }
+          
           $scope.ifEdit = true;
           $rootScope.loading = false;
         });  

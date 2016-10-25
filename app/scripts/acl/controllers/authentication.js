@@ -23,16 +23,12 @@ angular.module('opensrpSiteApp')
                         //this will kickstart angular to notice the change
                         $scope.$apply();
                     }
-                } else {
-                    Authentication.authenticate("sohel", "Sohel@123");
-                    {
-                        //
-                    }
-                    $window.location = '#/';
-                    }
-            }, function () {
-                alert('Authentication failed for user: ' + $scope.username);
-                $window.location = '#/';
+                } 
+                else{
+                    alert('Authentication failed for user: ' + $scope.username);
+                    $scope.loading = false;
+                    //$window.location = '#/';
+                }
             });
         };
     })

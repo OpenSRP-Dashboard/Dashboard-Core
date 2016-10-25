@@ -1,0 +1,53 @@
+<data-ng-include src="'views/partials/header.html'"></data-ng-include>
+<section>
+    <div class="container">
+        <div class="row">
+            <data-ng-include src="'views/partials/left-sidebar.html'"></data-ng-include>
+            <div class="row"> <!-- main col left -->
+              <div class="col-sm-9 col-md-9">
+                <div id="top" class="login-container">
+                    <h2 class="form-signin-heading"><span ng-show="ifEdit">Edit</span> <span ng-show="!ifEdit">Add</span> Location</h2>
+                    <p class="lead form-signin-heading"></p>
+                    <form  name="addLocation" ng-submit="save()">
+					          <div class="row">
+					          <div class="col-sm-4 col-md-4">
+                    <label>Select Location Tags</label>
+                    <select id="" class="form-control" name="tagSelection"  ng-change="startLoadingSelect()" ng-model="selectedTag">
+                      <option ng-click="" value="">Select Tag</option>
+                      <option ng-repeat="locationTag in sortedTags"  value="{{locationTag.id}}" ng-selected="" ng-if="$index<5">{{locationTag.name}}</option>
+                    </select>
+                    </div>
+
+                    <div class="col-sm-4 col-md-4 envelop" ng-repeat="locationTag in sortedTags" id="envelop_{{locationTag.name}}" ng-if="show[locationTag.name]">                        
+                          <label>Select {{locationTag.name}}</label>
+                          <select id = "id_{{locationTag.name}}" name = "select_{{locationTag.name}}" id="" class="form-control" ng-change="loadChildSelect(locationTag.name)" ng-model="selections[locationTag.name]"
+                          ng-options="loc.id as loc.name for loc in selectOptions[locationTag.name]">               
+                          </select>  
+                    </div>
+
+                    <div class="col-sm-4 col-md-4" >
+                        <label>Insert Location Name</label>
+                         <input id="loc" type="text" class="form-control" ng-required="true"  placeholder="Enter Location Name" name="locationName" ng-model="locationName" valid-location-name>
+
+                         <div ng-messages="addLocation.locationName.$error" >
+                         <div ng-message="required" class="maspro">
+                            A location name is required
+                         </div>
+                         <div ng-message="notAvailable" class="maspro">
+                            This location name is already taken. Try another one
+                         </div>
+                        </div>
+                    </div>
+                    
+          					<div class="col-sm-4 col-md-4">
+                    <button type="submit" ng-disabled="addLocation.locationName.$invalid || !textboxReached" id="submit"  class="btn btn-lg btn-primary btn-block">Submit</button>
+					         </div>
+                   </form>
+                   <div class="spinner" ng-show="loading"> <center><img src="images/spinner.gif"  alt="Opensrp"/></center></div>
+                  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
