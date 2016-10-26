@@ -115,8 +115,8 @@ angular.module('opensrpSiteApp')
         $scope.formData.roles = [];
 
         for(var i =0; i<$scope.users.length; i++){
-          if($scope.formData.selectedChildren[$scope.users[i].name]){
-            $scope.formData.children.push({"user_name" : $scope.users[i].name, "id" : $scope.users[i].id});
+          if($scope.formData.selectedChildren[$scope.users[i].user_name]){
+            $scope.formData.children.push({"user_name" : $scope.users[i].user_name, "id" : $scope.users[i].id});
           }
         }
 

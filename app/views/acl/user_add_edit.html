@@ -131,7 +131,7 @@
                     <label>Select Supervisor</label>
                     <select id="" class="form-control" name="parent" >
                       <option ng-click="formData.parent={}" value="">Select Parent </option>
-                      <option ng-repeat="user in users"  ng-click="formData.parent={'user_name': user.name, 'id':user.id}" value="{{user.name}}" ng-selected="user.name == formData.parent.user_name">{{user.name}}</option>
+                      <option ng-repeat="user in users"  ng-click="formData.parent={'user_name': user.user_name, 'id':user.id}" value="{{user.user_name}}" ng-selected="user.user_name == formData.parent.user_name">{{user.user_name}}</option>
                     </select>
                     </div>
 					</div>
@@ -142,7 +142,7 @@
 					<br/>
                     <span ng-repeat="user in users">
                     <!-- <input ng-checked="checked(access)" type="checkbox"  class="role_method" ng-model="formData.accessTokens[$index]" ng-true-value="'{{access}}'">{{access}} -->
-                    <input type="checkbox" ng-click="formData.selectedChildren[user.name] = !formData.selectedChildren[user.name]" ng-checked="formData.selectedChildren[user.name]"> {{user.name}}
+                    <input type="checkbox" ng-click="formData.selectedChildren[user.user_name] = !formData.selectedChildren[user.user_name]" ng-checked="formData.selectedChildren[user.user_name]"> {{user.user_name}}
                     </span>
                     </div>
 
